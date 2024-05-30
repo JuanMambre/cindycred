@@ -1,27 +1,28 @@
-
+import React from "react";
 import axios from "axios";
 import { useState } from "react";
+import Swal from 'sweetalert2'
 
-const Contact = () =>  {
+const Contact = () => {
   const [formStatus, setFormStatus] = useState(false);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState({
     name: "",
-    email: "",
     dni: "",
+    email: "",
     direccion: "",
     platform: "",
-    file: ""
+    files: []  // Cambiado para manejar múltiples archivos
   });
 
-  const handleFileChange = () => (e) => {
+  const handleFileChange = (e) => {
     setQuery((prevState) => ({
       ...prevState,
-      files: e.target.files[0]
+      files: Array.from(e.target.files) // Convertir FileList a Array
     }));
   };
 
-  const handleChange = () => (e) => {
+  const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
     setQuery((prevState) => ({
@@ -36,12 +37,18 @@ const Contact = () =>  {
     setLoading(true);
     const formData = new FormData();
     Object.entries(query).forEach(([key, value]) => {
-      formData.append(key, value);
+      if (key === "files") {
+        value.forEach((file, index) => {
+          formData.append(`file${index}`, file); // Añadir archivos con un nombre único
+        });
+      } else {
+        formData.append(key, value);
+      }
     });
 
     axios
       .post(
-        "https://getform.io/f/8a375f0f-1748-4e5f-ac53-da63282411ea",
+        "https://getform.io/f/panvpzya",
         formData,
         { headers: { Accept: "application/json" } }
       )
@@ -49,21 +56,43 @@ const Contact = () =>  {
         setFormStatus(true);
         setQuery({
           name: "",
-          email: ""
+          dni: "",
+          email: "",
+          direccion: "",
+          platform: "",
+          files: []
         });
         setLoading(false);
+        // Swal.fire({
+        //   title: "Good job!",
+        //   text: "You clicked the button!",
+        //   icon: "success",
+        //   button: "Aww yiss!",
+        // });
+        Swal.fire({
+          title: 'Gracias por contactaros',
+          text: 'En un lapso de 72hs habiles nos comunicaremos via email',
+          icon: 'success',
+          confirmButtonText: 'Ok!',
+        }).then((result) => {
+          if (result.value) {
+            window.location.reload();
+          }
+        })
+        //  // Refrescar la página
       })
       .catch(function (error) {
         console.log(error);
         setLoading(false);
       });
   };
+
   return (
-    <div className="App" name='contacto'>
-      <section className="bg-gradient-to-b from-green-700 to-green-900 text-black py-20 px-4 md:px-8 h-screen">
+    <div className="App" name="contacto">
+      <section className="bg-gradient-to-b from-green-700 to-green-900 text-black py-20 px-4 md:px-8 min-h-screen">
         <div className="max-w-6xl mx-auto text-white">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold">Contact Us</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mt-10">Contact Us</h2>
             <p className="text-lg">Let's get in touch</p>
           </div>
 
@@ -112,9 +141,9 @@ const Contact = () =>  {
               <div className="mb-4">
                 <input
                   type="text"
-                  name="Direccion"
+                  name="direccion"
                   placeholder="Direccion"
-                  value={query.Direccion}
+                  value={query.direccion}
                   onChange={handleChange}
                   className="w-full bg-green-800 text-white rounded-lg py-2 px-4 focus:outline-none focus:bg-green-600"
                 />
@@ -132,7 +161,8 @@ const Contact = () =>  {
               <div className="mb-4">
                 <input
                   type="file"
-                  name="file"
+                  name="files"
+                  multiple
                   onChange={handleFileChange}
                   className="w-full text-black"
                 />
