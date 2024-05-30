@@ -6,8 +6,8 @@ const Home = () => {
   return (
     <div name="inicio" className='min-h-screen w-full bg-gradient-to-b from-[#F6F6E9] to-green-300'>
       <div className='max-w-screen-lg mx-auto flex flex-col items-center justify-center h-full px-4 md:flex-row'>
-        <div className='flex flex-col justify-center h-full mt-10'>
-          <h2 className='text-green-950 text-4xl sm:text-7xl font-bold'>Bienvenido</h2>
+        <div className='flex flex-col justify-center h-full'>
+          <h2 className='text-green-950 text-4xl sm:text-7xl font-bold mt-64'>Bienvenido</h2>
           <p className='text-[#191914] font-semibold py-4 max-w-md'>
            No busques mas! Aqui tenemos la solucion a tus problemas.
           </p>
