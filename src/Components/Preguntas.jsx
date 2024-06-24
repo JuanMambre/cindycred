@@ -3,30 +3,33 @@ import React, { useState } from 'react'
 const FAQ = () => {
   const faqs = [
     {
-      question: '¿Cómo puedo solicitar un crédito?',
-      answer:
-        "Puedes solicitar un crédito a través de nuestro sitio web completando el formulario en la sección de 'Solicitar Crédito'."
+      question: '¿Como hago para solicitar un préstamo?',
+      answer: "Completando la presolicitud que esta en nuestra pagina web'."
     },
     {
-      question: '¿Qué documentos necesito para la solicitud?',
+      question: '¿Que monto puedo solicitar?',
       answer:
-        'Necesitarás una identificación válida, comprobante de ingresos y prueba de afiliación a un sindicato.'
+        'Podes solicitar hasta 1.000.000 siempre y cuando la cuota no supere el 20% de tus ingresos.'
     },
     {
-      question: '¿Cuánto tiempo tarda la aprobación?',
+      question: '¿Me informan cual es el monto que puedo solicitar?',
       answer:
-        'La aprobación suele tardar entre 24 y 48 horas, dependiendo de la complejidad de la solicitud.'
+        'Si, antes de confirmar la solicitud, recibirás un mensaje donde te informamos monto pre aprobado, cantidad de cuotas y  valor de las mismas.'
     },
     {
-      question: '¿Cuál es la tasa de interés?',
+      question: '¿Que documentación debo presentar?',
       answer:
-        'Ofrecemos tasas de interés competitivas que varían según el perfil del solicitante y el monto del crédito.'
+        'Al momento de llenar la presolicitud, debes adjuntar foto de: DNI, ultimo recibo de sueldo, Movimientos de los últimos 30 días de tu cuenta sueldo, Recibo de luz / gas / teléfono.'
+    },
+    {
+      question: '¿Como se pagan las cuotas?',
+      answer: 'Las cuotas son debitadas de tu recibo de sueldo.'
     }
   ]
 
   return (
     <div
-      name='faq'
+      name='preguntas frecuentes'
       className='w-full min-h-screen bg-gradient-to-b from-green-300 to-green-700 text-white flex items-center justify-center'
     >
       <div className='max-w-screen-lg p-4 mx-auto flex flex-col justify-center items-center w-full h-full'>

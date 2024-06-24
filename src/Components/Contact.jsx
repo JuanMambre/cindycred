@@ -13,16 +13,18 @@ const Contact = () => {
     telefono: '',
     monto: '',
     platform: '',
-    files: [] // Cambiado para manejar múltiples archivos
+    files: []
   })
 
+  // Manejo de cambios en archivos
   const handleFileChange = (e) => {
     setQuery((prevState) => ({
       ...prevState,
-      files: Array.from(e.target.files) // Convertir FileList a Array
+      files: Array.from(e.target.files)
     }))
   }
 
+  // Manejo de cambios en los inputs
   const handleChange = (e) => {
     const name = e.target.name
     const value = e.target.value
@@ -32,15 +34,46 @@ const Contact = () => {
     }))
   }
 
+  // Validación del formulario
+  const validateForm = () => {
+    const { name, dni, direccion, telefono, monto } = query
+    return (
+      name.trim() &&
+      dni.trim() &&
+      direccion.trim() &&
+      telefono.trim() &&
+      monto.trim()
+    )
+  }
+
+  // Manejo de eliminación de archivos
+  const handleFileRemove = (index) => {
+    setQuery((prevState) => ({
+      ...prevState,
+      files: prevState.files.filter((_, i) => i !== index)
+    }))
+  }
+
+  // Envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault()
     if (loading) return
+    if (!validateForm()) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Todos los campos son obligatorios.',
+        icon: 'error',
+        confirmButtonText: 'Ok!'
+      })
+      return
+    }
     setLoading(true)
+
     const formData = new FormData()
     Object.entries(query).forEach(([key, value]) => {
       if (key === 'files') {
         value.forEach((file, index) => {
-          formData.append(`file${index}`, file) // Añadir archivos con un nombre único
+          formData.append(`file${index}`, file)
         })
       } else {
         formData.append(key, value)
@@ -48,7 +81,7 @@ const Contact = () => {
     })
 
     axios
-      .post('https://getform.io/f/panvpzya', formData, {
+      .post('https://getform.io/f/lakmojxa', formData, {
         headers: { Accept: 'application/json' }
       })
       .then(function (response) {
@@ -73,7 +106,6 @@ const Contact = () => {
             window.location.reload()
           }
         })
-        //  // Refrescar la página
       })
       .catch(function (error) {
         console.log(error)
@@ -160,7 +192,7 @@ const Contact = () => {
                 <input
                   type='text'
                   name='monto'
-                  placeholder='Motno solicitado'
+                  placeholder='Monto solicitado'
                   value={query.monto}
                   onChange={handleChange}
                   className='w-full bg-green-800 text-white rounded-lg py-2 px-4 focus:outline-none focus:bg-green-600'
@@ -175,14 +207,33 @@ const Contact = () => {
                   className='w-full text-black'
                 />
               </div>
+              {/* Lista de archivos con opción de eliminar */}
+              <div className='mb-4'>
+                {query.files.map((file, index) => (
+                  <div
+                    key={index}
+                    className='flex justify-between items-center mb-2 bg-gray-200 p-2 rounded-lg'
+                  >
+                    <span>{file.name}</span>
+                    <button
+                      type='button'
+                      onClick={() => handleFileRemove(index)}
+                      className='text-red-600 hover:text-red-800'
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                ))}
+              </div>
               <button
                 type='submit'
                 className='bg-green-300 text-black px-6 py-3 rounded-lg font-semibold hover:bg-green-200 transition duration-300'
+                disabled={loading} // Deshabilitar el botón mientras se envía
               >
-                Enviar
+                {loading ? 'Enviando...' : 'Enviar'}
               </button>
               {formStatus && (
-                <p className='mt-4 text-green-500'>Message sent.</p>
+                <p className='mt-4 text-green-500'>Mensaje enviado.</p>
               )}
             </form>
           </div>
